@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>For Adithya 💖</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      min-height: 100vh;
+      text-align: center;
+      color: #333;
+    }
+
+    h1 {
+      margin-top: 30px;
+      color: #b30059;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      margin: 15px auto;
+      padding: 20px;
+      max-width: 360px;
+      border-radius: 18px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+    }
+
+    .locked {
+      color: gray;
+    }
+
+    .open {
+      color: #b30059;
+      font-weight: bold;
+    }
+
+    .message {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    .timer {
+      font-size: 14px;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>💝 Valentine Week for Adithya 💝</h1>
+  <p>One surprise every day… just for you 🫶</p>
+
+  <div class="container">
+    <div class="card" id="rose"></div>
+    <div class="card" id="propose"></div>
+    <div class="card" id="chocolate"></div>
+    <div class="card" id="teddy"></div>
+    <div class="card" id="promise"></div>
+    <div class="card" id="hug"></div>
+    <div class="card" id="valentine"></div>
+  </div>
+
+  <script>
+    function updateCard(id, title, openDate, message) {
+      const now = new Date();
+      const unlock = new Date(openDate);
+      const card = document.getElementById(id);
+
+      if (now >= unlock) {
+        card.innerHTML = `
+          <h2 class="open">${title} 🔓</h2>
+          <p class="message">${message}</p>
+        `;
+      } else {
+        const diff = unlock - now;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+
+        card.innerHTML = `
+          <h2 class="locked">${title} 🔒</h2>
+          <p class="timer">Opens in ${days} days ${hours} hours</p>
+        `;
+      }
+    }
+
+    updateCard(
+      "rose",
+      "🌹 Rose Day",
+      "2026-02-07T00:00:00",
+      "Adithya, this rose is a small symbol of how beautifully you’ve bloomed in my life ❤️"
+    );
+
+    updateCard(
+      "propose",
+      "💍 Propose Day",
+      "2026-02-08T00:00:00",
+      "If I had to choose again, I’d still choose you—every single time 🫣💖"
+    );
+
+    updateCard(
+      "chocolate",
+      "🍫 Chocolate Day",
+      "2026-02-09T00:00:00",
+      "Life feels sweeter with you in it… just like chocolate 😌🍫"
+    );
+
+    updateCard(
+      "teddy",
+      "🧸 Teddy Day",
+      "2026-02-10T00:00:00",
+      "This teddy carries all the hugs I owe you 🤍🧸"
+    );
+
+    updateCard(
+      "promise",
+      "🤞 Promise Day",
+      "2026-02-11T00:00:00",
+      "I promise to stand by you, support you, and care for you—always 💞"
+    );
+
+    updateCard(
+      "hug",
+      "🤗 Hug Day",
+      "2026-02-13T00:00:00",
+      "If I could, I’d pull you into the warmest hug right now 🫂❤️"
+    );
+
+    updateCard(
+      "valentine",
+      "❤️ Valentine’s Day",
+      "2026-02-14T00:00:00",
+      "Adithya, you are my favorite chapter, my safest place, my always 💍❤️"
+    );
+  </script>
+
+</body>
+</html>
