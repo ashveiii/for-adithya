@@ -1,151 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>For Adithya 💖</title>
+<meta charset="UTF-8">
+<title>For Shuttumani 💖</title>
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
-      min-height: 100vh;
-      text-align: center;
-      color: #333;
-    }
+<style>
+body{
+  margin:0;
+  font-family:Segoe UI, sans-serif;
+  background:linear-gradient(135deg,#ffdde1,#ee9ca7);
+  text-align:center;
+}
+h1{color:#b30059;margin-top:25px}
 
-    h1 {
-      margin-top: 30px;
-      color: #b30059;
-    }
+.card{
+  background:white;
+  margin:18px auto;
+  padding:20px;
+  max-width:360px;
+  border-radius:18px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
 
-    .container {
-      padding: 20px;
-    }
+.locked{color:gray}
+.open{color:#b30059}
+.timer{color:#777;font-size:14px}
+.message{margin-top:10px}
 
-    .card {
-      background: white;
-      margin: 15px auto;
-      padding: 20px;
-      max-width: 360px;
-      border-radius: 18px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      transition: transform 0.3s;
-    }
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
 
-    .card:hover {
-      transform: scale(1.03);
-    }
+.modal-content{
+  background:white;
+  padding:25px;
+  border-radius:16px;
+  max-width:340px;
+  animation:pop .4s ease;
+}
 
-    .locked {
-      color: gray;
-    }
-
-    .open {
-      color: #b30059;
-      font-weight: bold;
-    }
-
-    .message {
-      font-size: 16px;
-      margin-top: 10px;
-    }
-
-    .timer {
-      font-size: 14px;
-      color: #777;
-    }
-  </style>
+@keyframes pop{
+  from{transform:scale(.7);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+</style>
 </head>
 
 <body>
 
-  <h1>💝 Valentine Week for Adithya 💝</h1>
-  <p>One surprise every day… just for you 🫶</p>
+<h1>💝 Valentine Week for Adithya 💝</h1>
+<p>One surprise every day… just for you 🫶</p>
 
-  <div class="container">
-    <div class="card" id="rose"></div>
-    <div class="card" id="propose"></div>
-    <div class="card" id="chocolate"></div>
-    <div class="card" id="teddy"></div>
-    <div class="card" id="promise"></div>
-    <div class="card" id="hug"></div>
-    <div class="card" id="valentine"></div>
+<div class="card" id="rose"></div>
+<div class="card" id="chocolate"></div>
+<div class="card" id="teddy"></div>
+<div class="card" id="valentine"></div>
+
+<!-- Love Letter -->
+<div id="loveModal" class="modal">
+  <div class="modal-content">
+    <h2>My Love 💖</h2>
+    <p>
+      Adithya,<br><br>
+      You are my comfort, my smile, and my favorite place.
+      Thank you for being you and for making life so beautiful.
+      <br><br>
+      I love you — always ❤️
+    </p>
+    <button onclick="closeLove()">Close 💕</button>
   </div>
+</div>
 
-  <script>
-    function updateCard(id, title, openDate, message) {
-      const now = new Date();
-      const unlock = new Date(openDate);
-      const card = document.getElementById(id);
+<audio id="bgMusic" src="love.mp3" loop></audio>
 
-      if (now >= unlock) {
-        card.innerHTML = `
-          <h2 class="open">${title} 🔓</h2>
-          <p class="message">${message}</p>
-        `;
-      } else {
-        const diff = unlock - now;
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-        card.innerHTML = `
-          <h2 class="locked">${title} 🔒</h2>
-          <p class="timer">Opens in ${days} days ${hours} hours</p>
-        `;
-      }
-    }
+<script>
+const DEV_MODE = true; // change to false before sending
 
-    updateCard(
-      "rose",
-      "🌹 Rose Day",
-      "2026-02-07T00:00:00",
-      "Adithya, this rose is a small symbol of how beautifully you’ve bloomed in my life ❤️"
-    );
+function updateCard(id,title,date,gift,isValentine=false){
+  const now=new Date();
+  const unlock=new Date(date);
+  const card=document.getElementById(id);
 
-    updateCard(
-      "propose",
-      "💍 Propose Day",
-      "2026-02-08T00:00:00",
-      "If I had to choose again, I’d still choose you—every single time 🫣💖"
-    );
+  if(DEV_MODE || now>=unlock){
+    card.innerHTML=`
+      <h2 class="open">${title} 🔓</h2>
+      <img src="gift.png" width="120" style="cursor:pointer"
+       onclick="openGift('${id}','${gift}',${isValentine})">
+      <p class="timer">Tap the gift 🎁</p>
+      <div id="${id}-gift"></div>
+    `;
+  }else{
+    const d=Math.floor((unlock-now)/(1000*60*60*24));
+    card.innerHTML=`
+      <h2 class="locked">${title} 🔒</h2>
+      <p class="timer">Opens in ${d} day(s)</p>
+    `;
+  }
+}
 
-    updateCard(
-      "chocolate",
-      "🍫 Chocolate Day",
-      "2026-02-09T00:00:00",
-      "Life feels sweeter with you in it… just like chocolate 😌🍫"
-    );
+function openGift(id,img,isValentine){
+  const box=document.getElementById(id+"-gift");
+  const music=document.getElementById("bgMusic");
+  if(music.paused) music.play();
 
-    updateCard(
-      "teddy",
-      "🧸 Teddy Day",
-      "2026-02-10T00:00:00",
-      "This teddy carries all the hugs I owe you 🤍🧸"
-    );
+  if(isValentine){
+    box.innerHTML=`
+      <img src="${img}" width="180">
+      <p class="message">Will you be my Valentine? 💍❤️</p>
+      <button onclick="yes()">Yes ❤️</button>
+      <button onclick="yes()">HECK YES 😍</button>
+    `;
+  }else{
+    box.innerHTML=`<img src="${img}" width="180">`;
+  }
+}
 
-    updateCard(
-      "promise",
-      "🤞 Promise Day",
-      "2026-02-11T00:00:00",
-      "I promise to stand by you, support you, and care for you—always 💞"
-    );
+function yes(){
+  confetti({particleCount:200,spread:80,origin:{y:0.6}});
+  document.getElementById("loveModal").style.display="flex";
+}
 
-    updateCard(
-      "hug",
-      "🤗 Hug Day",
-      "2026-02-13T00:00:00",
-      "If I could, I’d pull you into the warmest hug right now 🫂❤️"
-    );
+function closeLove(){
+  document.getElementById("loveModal").style.display="none";
+}
 
-    updateCard(
-      "valentine",
-      "❤️ Valentine’s Day",
-      "2026-02-14T00:00:00",
-      "Adithya, you are my favorite chapter, my safest place, my always 💍❤️"
-    );
-  </script>
+/* DAYS */
+updateCard("rose","🌹 Rose Day","2026-02-07","rose.png");
+updateCard("chocolate","🍫 Chocolate Day","2026-02-09","chocolate.png");
+updateCard("teddy","🧸 Teddy Day","2026-02-10","teddy.png");
+updateCard("valentine","❤️ Valentine’s Day","2026-02-14","ring.png",true);
+</script>
 
 </body>
 </html>
